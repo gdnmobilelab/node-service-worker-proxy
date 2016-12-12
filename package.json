@@ -1,0 +1,26 @@
+{
+  "name": "node-service-worker-proxy",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "bin": {
+    "service-worker-proxy": "./cli.js"
+  },
+  "scripts": {
+    "test": "mocha --ui exports tests/test.js",
+    "from-env": "env.js"
+  },
+  "author": "Alastair Coote <alastair.coote@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bunyan": "^1.8.5",
+    "fs-promise": "^1.0.0",
+    "node-fetch": "^1.6.3",
+    "node-service-worker": "^2.0.3",
+    "restify": "^4.3.0",
+    "serve-static": "^1.11.1",
+    "yargs": "^6.5.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0"
+  }
+}
