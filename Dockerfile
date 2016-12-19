@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6
+FROM mhart/alpine-node:base-6
 
 ARG target
 ARG scope
@@ -10,10 +10,11 @@ ADD src src
 ADD package.json .
 ADD cli.js .
 ADD yargs.js .
-RUN mkdir -p source
+ADD builds/yarn-0.18.1.js ./yarn.js
+ADD yarn.lock .
 ADD $sourcelocal ./source
 
-RUN NODE_ENV=production npm install
+RUN node ./yarn.js install --production
 
 ENV target $target
 ENV worker $worker
