@@ -4,6 +4,28 @@ const url = require('url');
 const log = require('./log');
 const path = require('path');
 
+const customMimeTypes = [
+    {
+        regex: /^(.*)\/apple-app-site-association$/,
+        mime: "application/json"
+    }
+]
+
+function setHeaders(res, path) {
+    let existingType = res.getHeader('content-type');
+    
+    if (existingType) {
+        return;
+    }
+
+    for (customMime of customMimeTypes) {
+        if (customMime.regex.test(path)) {
+            res.setHeader('content-type', customMime.mime);
+            return;
+        }
+    }
+}
+
 module.exports = function(args) {
 
     return Promise.resolve()
@@ -29,7 +51,7 @@ module.exports = function(args) {
         let fullPath = path.resolve(process.cwd(), args.source);
 
         log.info({path: fullPath}, "Creating server for local origin.")
-        let static = serveStatic(fullPath, {maxAge: args.maxAge});
+        let static = serveStatic(fullPath, {maxAge: args.maxAge, setHeaders: setHeaders});
         
         let server = http.createServer(function(req,res) {
             static(req, res, function() {

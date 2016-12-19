@@ -48,6 +48,36 @@ module.exports = {
                 })
             })
         })
+    },
+    "Should add correct MIME type to local files": function() {
+
+        return proxyWorker({
+            source: path.join(__dirname, 'test-workers'),
+            target: 'https://www.example.com/',
+            port: 3000,
+            maxAge: 6000,
+            worker: 'pass-to-serve.js'
+        })
+        .then((server) => {
+            return Promise.all([
+                fetch('http://localhost:3000/test-response.txt')
+                .then((res) => {
+                    assert.equal(res.headers.get('content-type'), 'text/plain; charset=UTF-8') 
+                }),
+                fetch('http://localhost:3000/test.json')
+                .then((res) => {
+                    assert.equal(res.headers.get('content-type'), 'application/json') 
+                }),
+                fetch('http://localhost:3000/test.css')
+                .then((res) => {
+                    assert.equal(res.headers.get('content-type'), 'text/css; charset=UTF-8') 
+                }),
+                fetch('http://localhost:3000/apple-app-site-association')
+                .then((res) => {
+                    assert.equal(res.headers.get('content-type'), 'application/json') 
+                })
+            ])
+        })
     }
 
 }

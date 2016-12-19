@@ -3,7 +3,8 @@ FROM mhart/alpine-node:6
 ARG target
 ARG scope
 ARG worker
-ARG maxAge 
+ARG maxAge
+ARG sourcelocal 
 
 ADD src src
 ADD package.json .

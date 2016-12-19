@@ -16,11 +16,14 @@
     "fs-promise": "^1.0.0",
     "node-fetch": "^1.6.3",
     "node-service-worker": "^2.0.3",
-    "restify": "^4.3.0",
     "serve-static": "^1.11.1",
     "yargs": "^6.5.0"
   },
   "devDependencies": {
     "mocha": "^3.2.0"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/gdnmobilelab/node-service-worker-proxy.git"
   }
 }
