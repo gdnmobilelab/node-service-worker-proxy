@@ -1,6 +1,7 @@
 const http = require('http');
 const log = require('./log');
 const url = require('url');
+const enableDestroy = require('server-destroy');
 const {FetchEvent, resolveExtendableEvent, Request} = require('node-service-worker');
 
 module.exports = class WorkerServer {
@@ -9,6 +10,7 @@ module.exports = class WorkerServer {
         this.worker = worker;
         this.args = args;
         this.server = http.createServer(this.handleRequest.bind(this));
+        enableDestroy(this.server);
     }
 
     handleRequest(req, res) {
@@ -64,7 +66,7 @@ module.exports = class WorkerServer {
 
     stop() {
         return new Promise((fulfill, reject) => {
-            this.server.close((err) => {
+            this.server.destroy((err) => {
                 if (err) {
                     reject(err);
                 }

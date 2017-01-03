@@ -1,6 +1,6 @@
 {
   "name": "node-service-worker-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.js",
   "bin": {
     "service-worker-proxy": "./cli.js"
@@ -17,13 +17,14 @@
     "node-fetch": "^1.6.3",
     "node-service-worker": "^2.0.3",
     "serve-static": "^1.11.1",
+    "server-destroy": "^1.0.1",
     "yargs": "^6.5.0"
   },
   "devDependencies": {
     "mocha": "^3.2.0"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/gdnmobilelab/node-service-worker-proxy.git"
+    "type": "git",
+    "url": "https://github.com/gdnmobilelab/node-service-worker-proxy.git"
   }
 }
