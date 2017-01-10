@@ -11,9 +11,17 @@ module.exports = class WorkerServer {
         this.args = args;
         this.server = http.createServer(this.handleRequest.bind(this));
         enableDestroy(this.server);
+        this.pendingRequests = [];
     }
 
     handleRequest(req, res) {
+
+        if (!this.worker) {
+            log.warn({url: req.url}, "Holding request because we have no current worker");
+            pendingRequests.push({req, res});
+            return;
+        }
+
         let fullURL = url.resolve(this.args.target, req.url.substr(1))
        
         let fetchRequest = new Request(fullURL, {
@@ -50,6 +58,20 @@ module.exports = class WorkerServer {
             // need to work on this part.
             res.end("ERROR");
         })
+    }
+
+    clearWorker() {
+        this.worker = null;
+    }
+
+    setWorker(worker) {
+        log.info({pendingRequests: this.pendingRequests.length}, "Received new worker");
+        this.worker = worker;
+
+        this.pendingRequests.forEach(({req, res}) => {
+            this.handleRequest(req,res);
+        })
+
     }
 
     start(port) {

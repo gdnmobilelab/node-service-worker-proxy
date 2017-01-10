@@ -4,6 +4,7 @@ const log = require('../src/log');
 const fetch = require('node-fetch');
 const assert = require('assert');
 const http = require('http');
+const createTestWorker = require('./create-test-worker');
 
 log.level("error");
 
@@ -77,7 +78,43 @@ module.exports = {
                     assert.equal(res.headers.get('content-type'), 'application/json') 
                 })
             ])
+            .then(() => {
+                return server.stop();
+            })
         })
+    },
+    "Should watch for file changes": function() {
+        let sourcedir = path.join(__dirname, 'test-workers');
+
+        createTestWorker("TEST ONE", path.join(sourcedir, "watch-test.js"));
+
+        return proxyWorker({
+            source: path.join(__dirname, 'test-workers'),
+            target: 'https://www.example.com/',
+            port: 3000,
+            maxAge: 6000,
+            worker: 'watch-test.js',
+            watch: true
+        })
+        .then((server) => {
+            return fetch('http://localhost:3000/')
+            .then((res) => res.text())
+            .then((text) => assert.equal(text, "TEST ONE"))
+            .then(() => {
+                return new Promise((fulfill,reject) => {
+                    setTimeout(() => {
+                        createTestWorker("TEST TWO", path.join(sourcedir, "watch-test.js"));
+                    }, 500)
+                    setTimeout(fulfill, 2500);
+                })
+            })
+            .then(() => {
+                return fetch('http://localhost:3000/')
+                .then((res) => res.text())
+                .then((text) => assert.equal(text, "TEST TWO"))
+            })
+        })
+
     }
 
 }

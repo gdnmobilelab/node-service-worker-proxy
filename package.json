@@ -1,12 +1,12 @@
 {
   "name": "node-service-worker-proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/index.js",
   "bin": {
     "service-worker-proxy": "./cli.js"
   },
   "scripts": {
-    "test": "mocha --ui exports tests/test.js",
+    "test": "mocha --ui exports tests/test.js --no-timeouts",
     "from-env": "env.js"
   },
   "author": "Alastair Coote <alastair.coote@gmail.com>",
